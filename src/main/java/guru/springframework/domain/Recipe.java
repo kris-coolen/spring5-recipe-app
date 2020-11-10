@@ -1,6 +1,9 @@
 package guru.springframework.domain;
 
+import org.graalvm.compiler.nodes.memory.FloatingReadNode;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Recipe {
@@ -18,7 +21,10 @@ public class Recipe {
     private String directions;
 
     //todo add
-    //Private Difficulty difficulty
+    //Private Difficulty difficult
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
 
     @Lob
     private Byte[] image;
