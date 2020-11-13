@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -33,13 +37,24 @@ class IndexControllerTest {
         indexController = new IndexController(recipeService);
     }
 
+    @Test
+    void testMockMVC() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+        mockMvc.perform(MockMvcRequestBuilders.get("/"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("index"));
+    }
 
     @Test
     void getIndexPage() {
         //given
         Set<Recipe> recipeSet = new HashSet<>();
-        recipeSet.add(new Recipe());
-        recipeSet.add(new Recipe());
+        Recipe recipe1 = new Recipe();
+        recipe1.setDescription("Stoofvlees");
+        recipeSet.add(recipe1);
+        Recipe recipe2 = new Recipe();
+        recipe2.setDescription("Spaghetti");
+        recipeSet.add(recipe2);
         when(recipeService.getRecipes()).thenReturn(recipeSet);
         ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
         //when
