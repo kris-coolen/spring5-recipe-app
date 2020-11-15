@@ -116,7 +116,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public void removeIngredientOfRecipe(Long recipeId, Long ingredientId) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
-        if(!optionalRecipe.isPresent()){
+        if(optionalRecipe.isEmpty()){
             log.debug("Id of recipe does not exist! (id " + recipeId + ")");
         }
         else{
@@ -125,7 +125,7 @@ public class IngredientServiceImpl implements IngredientService {
                     .stream()
                     .filter(ingredient -> ingredient.getId().equals(ingredientId))
                     .findFirst();
-            if(!optionalIngredient.isPresent()){
+            if(optionalIngredient.isEmpty()){
                 log.debug("Recipe with id " + recipe + "does not have ingredient with id " + ingredientId);
             }
             else{
